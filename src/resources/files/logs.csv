@@ -1,0 +1,6 @@
+operacao,cod_trans,id_produto,nome_campo,valor_anterior,valor_atual,timestamp
+inicia,T1699653891,,,,,10-11-2023 19:04:52
+inicia,T1699653901,,,,,10-11-2023 19:05:02
+update,T1699653901,7,quantidade,54,33,10-11-2023 19:05:15
+checkpoint,,,,,,10-11-2023 19:07:31
+fail,,,,,,10-11-2023 19:09:44
