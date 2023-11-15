@@ -1,7 +1,8 @@
 id, name, price, quantity
-1,Camisa,4,987
-3,Livro,183.27,9
-4,Batata frita,25,10
-5,Cerveja,46.00,3
-6,Camiseta,58.72,32
-7,Máscara,15.26,33
+1,Camisa,4,20
+2,Tenis,58,20
+3,Livro,183.27,10
+4,Batata frita,25,20
+5,Cerveja,46.00,10
+6,Camiseta,58.72,10
+7,Máscara,15.26,10

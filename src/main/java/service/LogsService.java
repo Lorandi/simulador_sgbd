@@ -69,12 +69,16 @@ public class LogsService {
                 bw.write(log);
                 bw.newLine();
             }
-            for (String log : logsBuffer) {
-                if(!logsDatabase.contains(log)){
-                    bw.write(log);
-                    bw.newLine();
+
+            if(!logsBuffer.isEmpty()){
+                for (String log : logsBuffer) {
+                    if(!logsDatabase.contains(log)){
+                        bw.write(log);
+                        bw.newLine();
+                    }
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

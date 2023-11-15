@@ -32,6 +32,7 @@ public class TransactionService {
 
         if(transaction.getStatus().equals(TransactionStatus.STARTED)){
             transaction.setStatus(TransactionStatus.FINISHED);
+            LogsService.logsFromDatabase();
             var log = "finaliza,"+ transaction.getName() + ",,,,,"+ Utils.formatDateTime(Instant.now().getEpochSecond());
             LogsService.persistLogBuffer(log);
             LogsService.saveLogsOnDatabase();
@@ -77,5 +78,9 @@ public class TransactionService {
 
         return null;
 
+    }
+
+    public static void clearTransaction(){
+        transactions.clear();
     }
 }
