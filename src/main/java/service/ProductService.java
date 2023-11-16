@@ -1,13 +1,10 @@
 package service;
 
-import entities.Database;
-import entities.Logs;
 import entities.Product;
 import entities.Transaction;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Scanner;
 
 import static java.util.Objects.isNull;
@@ -15,20 +12,14 @@ import static validators.Validators.*;
 
 public class ProductService {
 
-    private static HashMap<Integer, Product> products;
-
-    public ProductService(HashMap<Integer, Product> products) {
-
-        this.products = products;
-    }
     public static void editProduct(Transaction transaction) {
         if (isNull(transaction) ) return;
 
-        Database.getInstance().showStockListInMemory();
+        DatabaseService.showProductsBuffer();
         StringBuilder log = new StringBuilder();
         log.append("update,").append(transaction.getName()).append(",");
 
-        if (!products.isEmpty()) {
+        if (!DatabaseService.getProductsBuffer().isEmpty()) {
             Scanner sc = new Scanner(System.in);
             Product produtcOnStock = searchProductOnStock();
 
@@ -81,7 +72,7 @@ public class ProductService {
 
             if (confirmOperation()) {
                 log.append(",").append(Utils.formatDateTime(Instant.now().getEpochSecond()));
-                Logs.getInstance().persistLogBuffer(log.toString());
+                LogsService.addToLogBuffer(log.toString());
                 System.out.println("Operação realizada com sucesso");
 
             } else {
@@ -103,6 +94,6 @@ public class ProductService {
         } else {
             System.out.println("Lista ainda não tem produtos");
         }
-        Database.getInstance().showStockListInMemory();
+        DatabaseService.showProductsBuffer();
     }
 }

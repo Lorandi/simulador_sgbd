@@ -3,44 +3,39 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recovery {
-    private static final Recovery recovery =  new Recovery();
-    private static final List<String> listUndo = new ArrayList<>();
-    private static final List<String> listRedo = new ArrayList<>();
+public abstract class Recovery {
+    private static List<String> listUndo = new ArrayList<>();
+    private static List<String> listRedo = new ArrayList<>();
 
-    public static Recovery getInstance() {
-        return recovery;
-    }
-
-    public List<String> getListUndo() {
+    public static List<String> getListUndo() {
         return listUndo;
     }
 
-    public List<String> getListRedo() {
+    public static List<String> getListRedo() {
         return listRedo;
     }
 
-    public void persistListUndo(String undo) {
-        listUndo.add(undo);
-    }
+    public static void addToListUndo(String undo) {listUndo.add(undo); }
 
-    public void persistListRedo(String redo) {
-        listRedo.add(redo);
-    }
+    public static void addToListRedo(String redo) {listRedo.add(redo);}
 
-    public void removeListUndo(String undo) {
+    public static void setListUndo(List<String> list) {listUndo = list;}
+
+    public static void setListRedo(List<String> list){ listRedo = list; }
+
+    public static void removeFromListUndo(String undo) {
         listUndo.remove(undo);
     }
 
-    public void removeListRedo(String redo) {
+    public static void removeFromListRedo(String redo) {
         listRedo.remove(redo);
     }
 
-    public void removeAllListUndo() {
+    public static void removeAllListUndo() {
         listUndo.clear();
     }
 
-    public void removeAllListRedo() {
+    public static void removeAllListRedo() {
         listRedo.clear();
     }
 

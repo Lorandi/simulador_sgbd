@@ -6,18 +6,16 @@ import java.io.*;
 import java.util.List;
 
 import static utils.Constants.CABECALHO;
+import static utils.Constants.LOGS_FILE_PATH;
 
 public class LogsService {
 
-    private static final Logs logs = Logs.getInstance();
-    private static final List<String> logsBuffer = logs.getLogsBuffer();
-    private static final List<String> logsDatabase = logs.getLogsDatabase();
-
     public static void showLogsBuffer() {
         System.out.println("\n Lista de logs no buffer:");
+        List<String> logsBuffer = getLogsBuffer();
         if (logsBuffer.isEmpty()) {
             System.out.println(" Buffer vazio");
-        }else{
+        } else {
             System.out.println(CABECALHO);
             for (String log : logsBuffer) {
                 System.out.println(log);
@@ -26,10 +24,11 @@ public class LogsService {
     }
 
     public static void showLogsOnDatabase() {
-        logsFromDatabase();
-        if(logsDatabase.isEmpty()){
+        getLogsFromLogsFile();
+        List<String> logsDatabase = getLogsDatabase();
+        if (logsDatabase.isEmpty()) {
             System.out.println("Não há logs salvos em disco");
-        }else{
+        } else {
             System.out.println("\n Lista de logs em memória");
             System.out.println(CABECALHO);
             for (String log : logsDatabase) {
@@ -38,16 +37,14 @@ public class LogsService {
         }
     }
 
-
-    public static void logsFromDatabase() {
-        String path = "src/resources/files/logs.csv";
-
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+    public static void getLogsFromLogsFile() {
+        List<String> logsDatabase = getLogsDatabase();
+        try (BufferedReader br = new BufferedReader(new FileReader(LOGS_FILE_PATH))) {
             String line = br.readLine(); //atribuido valor para ler a primeira linha com os nomes dos parâmentros
 
             while ((line = br.readLine()) != null) {
-                if(!logsDatabase.contains(line)){
-                    logsDatabase.add(line);
+                if (!logsDatabase.contains(line)) {
+                    addToLogDatabase(line);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -59,10 +56,19 @@ public class LogsService {
         }
     }
 
-    public static void saveLogsOnDatabase() {
-        String path = "src/resources/files/logs.csv";
+    public static void saveLogsOnLogsFile() {
+        List<String> logsDatabase = getLogsDatabase();
+        List<String> logsBuffer = getLogsBuffer();
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
+        if (!logsBuffer.isEmpty()) {
+            for (String log : logsBuffer) {
+                if (!logsDatabase.contains(log)) {
+                    logsDatabase.add(log);
+                }
+            }
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(LOGS_FILE_PATH))) {
             bw.write(CABECALHO);
             bw.newLine();
             for (String log : logsDatabase) {
@@ -70,29 +76,38 @@ public class LogsService {
                 bw.newLine();
             }
 
-            if(!logsBuffer.isEmpty()){
-                for (String log : logsBuffer) {
-                    if(!logsDatabase.contains(log)){
-                        bw.write(log);
-                        bw.newLine();
-                    }
-                }
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        getLogsFromLogsFile();
     }
 
-    public static void persistLogBuffer(String log) {
-        Logs.getInstance().persistLogBuffer(log);
+    public static void addToLogBuffer(String log) {
+        Logs.addLogBuffer(log);
     }
 
-    public static void persistLogDatabase(String log) {
-        Logs.getInstance().persistLogDatabase(log);
+    public static void addToLogDatabase(String log) {
+        Logs.addLogDatabase(log);
     }
 
-    public static void clearLogsBuffer(){
-        logsBuffer.clear();
+    public static void clearLogsBuffer() {
+        Logs.clearLogsBuffer();
     }
+
+    public static void clearLogsDatabase() {
+        Logs.clearLogsDatabase();
+    }
+
+    public static List<String> getLogsBuffer() {
+        return Logs.getLogsBuffer();
+    }
+
+    public static List<String> getLogsDatabase() {
+        return Logs.getLogsDatabase();
+    }
+
+    public static void reloadLogsDatabase() {
+        getLogsFromLogsFile();
+    }
+
 }

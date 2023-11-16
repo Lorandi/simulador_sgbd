@@ -1,6 +1,5 @@
 package service;
 
-import entities.Logs;
 import entities.Transaction;
 import enums.TransactionStatus;
 
@@ -22,7 +21,7 @@ public class TransactionService {
         Transaction transaction = new Transaction();
         transactions.put(transaction.getId(), transaction);
         var log = "inicia,"+ transaction.getName() + ",,,,,"+ Utils.formatDateTime(Instant.now().getEpochSecond());
-        LogsService.persistLogBuffer(log);
+        LogsService.addToLogBuffer(log);
         return transaction;
     }
 
@@ -32,10 +31,10 @@ public class TransactionService {
 
         if(transaction.getStatus().equals(TransactionStatus.STARTED)){
             transaction.setStatus(TransactionStatus.FINISHED);
-            LogsService.logsFromDatabase();
+
             var log = "finaliza,"+ transaction.getName() + ",,,,,"+ Utils.formatDateTime(Instant.now().getEpochSecond());
-            LogsService.persistLogBuffer(log);
-            LogsService.saveLogsOnDatabase();
+            LogsService.addToLogBuffer(log);
+            LogsService.saveLogsOnLogsFile();
             System.out.println(transaction.getName() + ": finalizada");
         } else{
             System.out.println("\n Transação já finalizada ou inexistente \n");

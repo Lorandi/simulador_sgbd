@@ -3,38 +3,34 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import static service.LogsService.logsFromDatabase;
-
 public class Logs {
-    private static final Logs logs = new Logs();
-    private static final List<String> logsBuffer = new ArrayList<>();
-    private static final List<String> logsDatabase = new ArrayList<>();
 
-    public static Logs getInstance() {
-        return logs;
-    }
+    private static List<String> logsBuffer = new ArrayList<>();
+    private static List<String> logsDatabase = new ArrayList<>();
 
-    public List<String> getLogsBuffer() {
+    public static List<String> getLogsBuffer() {
         return logsBuffer;
     }
 
-    public List<String> getLogsDatabase() {
-        return logsDatabase;
-    }
+    public static List<String> getLogsDatabase() { return logsDatabase; }
 
-    public void persistLogBuffer(String log) {
-        logsBuffer.add(log);
-    }
+    public static void setLogsBuffer(List<String> list) { logsBuffer = list; }
 
-    public void removeLogBuffer(String log) {
+    public static void setLogsDatabase(List<String> list) { logsDatabase = list;}
+
+    public static void clearLogsBuffer() { logsBuffer.clear(); }
+
+    public static void clearLogsDatabase() { logsDatabase.clear(); }
+
+    public static void addLogBuffer(String log) { logsBuffer.add(log); }
+
+    public static void addLogDatabase(String log) { logsDatabase.add(log);}
+
+    public static void removeLogBuffer(String log) {
         logsBuffer.remove(log);
     }
 
-    public void persistLogDatabase(String log) {
-        logsDatabase.add(log);
-    }
-
-    public void removeLogDatabase(String log) {
+    public static void removeLogDatabase(String log) {
         logsDatabase.remove(log);
     }
 }

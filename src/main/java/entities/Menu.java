@@ -3,27 +3,18 @@ package entities;
 import enums.OptionsMenu;
 import service.*;
 
-import java.util.HashMap;
 import java.util.Scanner;
 
-import static entities.Database.productsBuffer;
 import static enums.OptionsMenu.*;
 
 
 public class Menu {
 
-    HashMap<Integer, Product> products;
-
-    ProductService productService;
-
     TransactionService transactionService;
 
 
-
     public Menu(){
-        Database.getInstance().productsBuffer(productsBuffer);
-        this.products = Database.getInstance().recoverProducts();
-        this.productService = new ProductService(products);
+        RecoveryService.checkingDatabaseIntegrity();
         this.transactionService = new TransactionService(TransactionService.transactions);
     }
 
@@ -68,11 +59,11 @@ public class Menu {
                 break;
 
             case DATABASE_BUFFER:
-                Database.getInstance().showStockListInMemory();
+                DatabaseService.showProductsBuffer();
                 break;
 
             case DATABASE_DISC:
-                Database.getInstance().showSavedInDatabase();
+                DatabaseService.showProductsDatabase();
                 break;
 
             case CHECK_POINT:
@@ -80,7 +71,7 @@ public class Menu {
                 break;
 
             case FAIL:
-                RecoveryService.fail();
+                FailService.fail();
                 RecoveryService.recoveryFromDatabaseLogs();
                 break;
 

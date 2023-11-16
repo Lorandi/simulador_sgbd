@@ -3,6 +3,7 @@ package validators;
 import entities.Database;
 import entities.Product;
 import exceptions.ValueMustBePositiveException;
+import service.DatabaseService;
 
 import java.math.BigDecimal;
 import java.util.InputMismatchException;
@@ -89,11 +90,7 @@ public class Validators {
             verificaConfirmacao = confirmation.equals("1") || confirmation.equals("2");
         }
 
-        if (confirmation.equals("1")) {
-            return true;
-        } else {
-            return false;
-        }
+        return confirmation.equals("1");
     }
 
     public static Product searchProductOnStock() {
@@ -103,9 +100,9 @@ public class Validators {
             try {
                 System.out.print("\nQual Id do produto? ");
                 String idProduto = sc.next();
-                for (Product product : Database.getInstance().recoverProducts().values()) {
+                for (Product product : DatabaseService.getProductsBuffer().values()) {
                     if (Integer.parseInt(idProduto) == product.getId()) {
-                        produtcOnStock = Database.getInstance().recoverProducts().get(Integer.parseInt(idProduto));
+                        produtcOnStock = DatabaseService.getProductBuffer(Integer.parseInt(idProduto));
                     }
                 }
                 if (produtcOnStock == null) {
